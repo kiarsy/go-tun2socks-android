@@ -20,14 +20,21 @@ var lwipStack core.LWIPStack
 var v *vcore.Instance
 var isStopped = false
 
+// VpnService should be implemented in Java/Kotlin.
 type VpnService interface {
+	// Protect is just a proxy to the VpnService.protect() method.
+	// See also: https://developer.android.com/reference/android/net/VpnService.html#protect(int)
 	Protect(fd int)
 }
 
+// PacketFlow should be implemented in Java/Kotlin.
 type PacketFlow interface {
+	// WritePacket should writes packets to the TUN fd.
 	WritePacket(packet []byte)
 }
 
+// Write IP packets to the lwIP stack. Call this function in the main loop of
+// the VpnService in Java/Kotlin, which should reads packets from the TUN fd.
 func InputPacket(data []byte) {
 	lwipStack.Write(data)
 }
@@ -35,6 +42,7 @@ func InputPacket(data []byte) {
 func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte, assetPath string) {
 	if packetFlow != nil {
 		if lwipStack == nil {
+			// Setup the lwIP stack.
 			lwipStack = core.NewLWIPStack()
 		}
 
