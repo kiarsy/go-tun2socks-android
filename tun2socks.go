@@ -2,6 +2,7 @@ package tun2socks
 
 import (
 	"context"
+	"errors"
 	"log"
 	"os"
 	"strings"
@@ -24,7 +25,7 @@ var isStopped = false
 type VpnService interface {
 	// Protect is just a proxy to the VpnService.protect() method.
 	// See also: https://developer.android.com/reference/android/net/VpnService.html#protect(int)
-	Protect(fd int)
+	Protect(fd int) bool
 }
 
 // PacketFlow should be implemented in Java/Kotlin.
@@ -51,8 +52,11 @@ func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte
 
 		// Protect file descriptors of connections dial from the VPN process to prevent infinite loop.
 		vinternet.RegisterDialerController(func(network, address string, fd uintptr) error {
-			vpnService.Protect(int(fd))
-			return nil
+			if vpnService.Protect(int(fd)) {
+				return nil
+			} else {
+				return errors.New("failed to protect fd")
+			}
 		})
 
 		// Share the buffer pool.
