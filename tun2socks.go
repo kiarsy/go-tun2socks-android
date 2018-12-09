@@ -37,7 +37,9 @@ type PacketFlow interface {
 // Write IP packets to the lwIP stack. Call this function in the main loop of
 // the VpnService in Java/Kotlin, which should reads packets from the TUN fd.
 func InputPacket(data []byte) {
-	lwipStack.Write(data)
+	if lwipStack != nil {
+		lwipStack.Write(data)
+	}
 }
 
 // StartV2Ray sets up lwIP stack, starts a V2Ray instance and registers the instance as the
@@ -112,6 +114,10 @@ func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte
 
 func StopV2Ray() {
 	isStopped = true
-	lwipStack.Close()
+	if lwipStack != nil {
+		lwipStack.Close()
+		lwipStack = nil
+	}
 	v.Close()
+	v = nil
 }
