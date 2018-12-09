@@ -40,7 +40,11 @@ func InputPacket(data []byte) {
 	lwipStack.Write(data)
 }
 
-func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte, assetPath string) {
+// StartV2Ray sets up lwIP stack, starts a V2Ray instance and registers the instance as the
+// connection handler for tun2socks. `exceptionDomains` and `exceptionIPs` are 1-1 corresponding
+// domain-IP pairs that separated by comma, each domain name only allow 1 IP for now.
+// FIXME: Allow multiple IPs for each domain name.
+func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte, assetPath, exceptionDomains, exceptionIPs string) {
 	if packetFlow != nil {
 		if lwipStack == nil {
 			// Setup the lwIP stack.
@@ -75,8 +79,17 @@ func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte
 		}
 		ctx := vproxyman.ContextWithSniffingConfig(context.Background(), sniffingConfig)
 
+		// Using an exception domain-IP map in the handler to prevent infinite loop while resolving
+		// proxy server domain names.
+		domains := strings.Split(exceptionDomains, ",")
+		ips := strings.Split(exceptionIPs, ",")
+		var domainIPMap = make(map[string]string, len(domains))
+		for idx, _ := range domains {
+			domainIPMap[domains[idx]] = ips[idx]
+		}
+
 		// Register tun2socks connection handlers.
-		vhandler := v2ray.NewHandler(ctx, v)
+		vhandler := v2ray.NewHandlerWithExceptionDomains(ctx, v, domainIPMap)
 		core.RegisterTCPConnectionHandler(vhandler)
 		core.RegisterUDPConnectionHandler(vhandler)
 
