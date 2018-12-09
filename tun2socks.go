@@ -54,14 +54,19 @@ func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte
 		// Assets
 		os.Setenv("v2ray.location.asset", assetPath)
 
-		// Protect file descriptors of connections dial from the VPN process to prevent infinite loop.
-		vinternet.RegisterDialerController(func(network, address string, fd uintptr) error {
-			if vpnService.Protect(int(fd)) {
+		// Protect file descriptors of net connections in the VPN process to prevent infinite loop.
+		protectFd := func(s VpnService, fd int) error {
+			if s.Protect(fd) {
 				return nil
 			} else {
 				return errors.New("failed to protect fd")
 			}
-		})
+		}
+		netCtlr := func(network, address string, fd uintptr) error {
+			return protectFd(vpnService, int(fd))
+		}
+		vinternet.RegisterDialerController(netCtlr)
+		vinternet.RegisterListenerController(netCtlr)
 
 		// Share the buffer pool.
 		core.SetBufferPool(vbytespool.GetPool(core.BufSize))
