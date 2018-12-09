@@ -6,7 +6,7 @@ LDFLAGS='-s -w'
 IMPORT_PATH=github.com/eycorsican/go-tun2socks-android
 TUN2SOCKS_PATH=$(GOPATH)/src/github.com/eycorsican/go-tun2socks
 
-BUILD_CMD="cd $(BUILDDIR) && $(GOBIND) -a -ldflags $(LDFLAGS) -target=android -o $(ARTIFACT) $(IMPORT_PATH)"
+BUILD_CMD="cd $(BUILDDIR) && $(GOBIND) -a -ldflags $(LDFLAGS) -target=android -tags android -o $(ARTIFACT) $(IMPORT_PATH)"
 
 all: $(ARTIFACT)
 
