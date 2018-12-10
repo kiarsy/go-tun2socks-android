@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"syscall"
 
 	vcore "v2ray.com/core"
 	vproxyman "v2ray.com/core/app/proxyman"
@@ -40,6 +41,15 @@ func InputPacket(data []byte) {
 	if lwipStack != nil {
 		lwipStack.Write(data)
 	}
+}
+
+// SetNonblock puts the fd in blocking or non-blocking mode.
+func SetNonblock(fd int, nonblocking bool) bool {
+	err := syscall.SetNonblock(fd, nonblocking)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 // StartV2Ray sets up lwIP stack, starts a V2Ray instance and registers the instance as the
