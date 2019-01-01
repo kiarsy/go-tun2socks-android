@@ -3,7 +3,9 @@ package tun2socks
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
+	"net"
 	"os"
 	"strings"
 	"syscall"
@@ -11,6 +13,7 @@ import (
 	vcore "v2ray.com/core"
 	vproxyman "v2ray.com/core/app/proxyman"
 	vbytespool "v2ray.com/core/common/bytespool"
+	vnet "v2ray.com/core/common/net"
 	vinternet "v2ray.com/core/transport/internet"
 
 	"github.com/eycorsican/go-tun2socks/core"
@@ -21,6 +24,8 @@ var err error
 var lwipStack core.LWIPStack
 var v *vcore.Instance
 var isStopped = false
+
+var LocalDNS = "223.5.5.5:53"
 
 // VpnService should be implemented in Java/Kotlin.
 type VpnService interface {
@@ -53,10 +58,8 @@ func SetNonblock(fd int, nonblocking bool) bool {
 }
 
 // StartV2Ray sets up lwIP stack, starts a V2Ray instance and registers the instance as the
-// connection handler for tun2socks. `exceptionDomains` and `exceptionIPs` are 1-1 corresponding
-// domain-IP pairs that separated by comma, each domain name only allow 1 IP for now.
-// FIXME: Allow multiple IPs for each domain name.
-func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte, assetPath, exceptionDomains, exceptionIPs string) {
+// connection handler for tun2socks.
+func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte, assetPath string) {
 	if packetFlow != nil {
 		if lwipStack == nil {
 			// Setup the lwIP stack.
@@ -71,7 +74,7 @@ func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte
 			if s.Protect(fd) {
 				return nil
 			} else {
-				return errors.New("failed to protect fd")
+				return errors.New(fmt.Sprintf("failed to protect fd %v", fd))
 			}
 		}
 		netCtlr := func(network, address string, fd uintptr) error {
@@ -96,17 +99,8 @@ func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte
 		}
 		ctx := vproxyman.ContextWithSniffingConfig(context.Background(), sniffingConfig)
 
-		// Using an exception domain-IP map in the handler to prevent infinite loop while resolving
-		// proxy server domain names.
-		domains := strings.Split(exceptionDomains, ",")
-		ips := strings.Split(exceptionIPs, ",")
-		var domainIPMap = make(map[string]string, len(domains))
-		for idx, _ := range domains {
-			domainIPMap[domains[idx]] = ips[idx]
-		}
-
 		// Register tun2socks connection handlers.
-		vhandler := v2ray.NewHandlerWithExceptionDomains(ctx, v, domainIPMap)
+		vhandler := v2ray.NewHandler(ctx, v)
 		core.RegisterTCPConnectionHandler(vhandler)
 		core.RegisterUDPConnectionHandler(vhandler)
 
@@ -130,4 +124,14 @@ func StopV2Ray() {
 	}
 	v.Close()
 	v = nil
+}
+
+func init() {
+	net.DefaultResolver = &net.Resolver{
+		PreferGo: true,
+		Dial: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			d, _ := vnet.ParseDestination(fmt.Sprintf("%v:%v", network, LocalDNS))
+			return vinternet.DialSystem(ctx, d, nil)
+		},
+	}
 }
