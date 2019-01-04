@@ -20,12 +20,11 @@ import (
 	"github.com/eycorsican/go-tun2socks/proxy/v2ray"
 )
 
+var localDNS = "223.5.5.5:53"
 var err error
 var lwipStack core.LWIPStack
 var v *vcore.Instance
 var isStopped = false
-
-var LocalDNS = "223.5.5.5:53"
 
 // VpnService should be implemented in Java/Kotlin.
 type VpnService interface {
@@ -55,6 +54,12 @@ func SetNonblock(fd int, nonblocking bool) bool {
 		return false
 	}
 	return true
+}
+
+// SetLocalDNS sets the DNS server that used by Go's default resolver, it accepts
+// string in the form "host:port", e.g. 223.5.5.5:53
+func SetLocalDNS(dns string) {
+	localDNS = dns
 }
 
 // StartV2Ray sets up lwIP stack, starts a V2Ray instance and registers the instance as the
@@ -130,7 +135,7 @@ func init() {
 	net.DefaultResolver = &net.Resolver{
 		PreferGo: true,
 		Dial: func(ctx context.Context, network, addr string) (net.Conn, error) {
-			d, _ := vnet.ParseDestination(fmt.Sprintf("%v:%v", network, LocalDNS))
+			d, _ := vnet.ParseDestination(fmt.Sprintf("%v:%v", network, localDNS))
 			return vinternet.DialSystem(ctx, d, nil)
 		},
 	}
