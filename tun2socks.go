@@ -26,6 +26,10 @@ var lwipStack core.LWIPStack
 var v *vcore.Instance
 var isStopped = false
 
+type DBService interface {
+	InsertProxyLog(target, tag string, startTime, endTime int64, uploadBytes, downloadBytes int32)
+}
+
 // VpnService should be implemented in Java/Kotlin.
 type VpnService interface {
 	// Protect is just a proxy to the VpnService.protect() method.
@@ -64,8 +68,12 @@ func SetLocalDNS(dns string) {
 
 // StartV2Ray sets up lwIP stack, starts a V2Ray instance and registers the instance as the
 // connection handler for tun2socks.
-func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, configBytes []byte, assetPath string) {
+func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, dbService DBService, configBytes []byte, assetPath, proxyLogDBPath string) {
 	if packetFlow != nil {
+		if dbService != nil {
+			v2ray.DefaultDBService = dbService
+		}
+
 		if lwipStack == nil {
 			// Setup the lwIP stack.
 			lwipStack = core.NewLWIPStack()
@@ -129,6 +137,7 @@ func StopV2Ray() {
 	}
 	v.Close()
 	v = nil
+	v2ray.DefaultDBService = nil
 }
 
 func init() {
