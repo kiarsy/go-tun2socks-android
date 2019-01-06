@@ -14,6 +14,7 @@ import (
 	vproxyman "v2ray.com/core/app/proxyman"
 	vbytespool "v2ray.com/core/common/bytespool"
 	vnet "v2ray.com/core/common/net"
+	vsession "v2ray.com/core/common/session"
 	vinternet "v2ray.com/core/transport/internet"
 
 	"github.com/eycorsican/go-tun2socks/core"
@@ -27,7 +28,7 @@ var v *vcore.Instance
 var isStopped = false
 
 type DBService interface {
-	InsertProxyLog(target, tag string, startTime, endTime int64, uploadBytes, downloadBytes int32)
+	InsertProxyLog(target, tag string, startTime, endTime int64, uploadBytes, downloadBytes int32, recordType, dnsQueryType int32, dnsRequest, dnsResponse string, dnsNumIPs int32)
 }
 
 // VpnService should be implemented in Java/Kotlin.
@@ -71,7 +72,7 @@ func SetLocalDNS(dns string) {
 func StartV2Ray(packetFlow PacketFlow, vpnService VpnService, dbService DBService, configBytes []byte, assetPath, proxyLogDBPath string) {
 	if packetFlow != nil {
 		if dbService != nil {
-			v2ray.DefaultDBService = dbService
+			vsession.DefaultDBService = dbService
 		}
 
 		if lwipStack == nil {
@@ -137,7 +138,7 @@ func StopV2Ray() {
 	}
 	v.Close()
 	v = nil
-	v2ray.DefaultDBService = nil
+	vsession.DefaultDBService = nil
 }
 
 func init() {
