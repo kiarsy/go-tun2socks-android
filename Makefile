@@ -3,7 +3,7 @@ GOBIND=$(GOMOBILE) bind
 BUILDDIR=$(shell pwd)/build
 ARTIFACT=$(BUILDDIR)/tun2socks.aar
 LDFLAGS='-s -w'
-IMPORT_PATH=https://github.com/kiarsy/go-tun2socks-android
+IMPORT_PATH=github.com/kiarsy/go-tun2socks-android
 
 BUILD_CMD="cd $(BUILDDIR) && $(GOBIND) -a -ldflags $(LDFLAGS) -target=android -tags android -o $(ARTIFACT) $(IMPORT_PATH)"
 BUILD_DEBUG_CMD="cd $(BUILDDIR) && $(GOBIND) -a -ldflags $(LDFLAGS) -target=android -tags 'android debug' -o $(ARTIFACT) $(IMPORT_PATH)"
