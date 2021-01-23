@@ -1,6 +1,8 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
+github.com/eycorsican/go-tun2socks v1.11.2 h1:ZT4nAJyRcGmfK6qlNyWxuv/enatnd1bVK3IGasxdQy8=
+github.com/eycorsican/go-tun2socks v1.11.2/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
 github.com/eycorsican/go-tun2socks v1.11.3 h1:aHrBLkDVj4pyHYKzQn7WxJMHraZ5TvYmcKuA2cYlR10=
 github.com/eycorsican/go-tun2socks v1.11.3/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
