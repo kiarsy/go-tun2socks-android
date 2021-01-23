@@ -5,6 +5,8 @@ github.com/eycorsican/go-tun2socks v1.11.2 h1:ZT4nAJyRcGmfK6qlNyWxuv/enatnd1bVK3
 github.com/eycorsican/go-tun2socks v1.11.2/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
 github.com/eycorsican/go-tun2socks v1.11.3 h1:aHrBLkDVj4pyHYKzQn7WxJMHraZ5TvYmcKuA2cYlR10=
 github.com/eycorsican/go-tun2socks v1.11.3/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
+github.com/eycorsican/go-tun2socks v1.12.0 h1:sW+Bdy3IenYoIh8zDICdNPEQabaS0Uv9BaRMcqIxum8=
+github.com/eycorsican/go-tun2socks v1.12.0/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
 github.com/eycorsican/go-tun2socks v1.13.0 h1:t+k1+mt5xvS8iWhmrYKEAiIWArQqSFJUU/B5Ivivjws=
 github.com/eycorsican/go-tun2socks v1.13.0/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
 github.com/eycorsican/go-tun2socks v1.13.1 h1:Nc21WI3ckkCQZO03+0a5u9B1nYD7Cq//plMyvN8WZT8=
