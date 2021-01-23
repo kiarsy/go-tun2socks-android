@@ -3,7 +3,7 @@ module github.com/kiarsy/go-tun2socks-android
 go 1.13
 
 require (
-	github.com/eycorsican/go-tun2socks v1.11.2
+	github.com/eycorsican/go-tun2socks v1.14.1
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/miekg/dns v1.1.35 // indirect
 	github.com/v2ray/v2ray-core v4.10.0+incompatible
