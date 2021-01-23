@@ -8,5 +8,5 @@ require (
 	github.com/miekg/dns v1.1.35 // indirect
 	github.com/v2ray/v2ray-core v4.10.0+incompatible
 	golang.org/x/mobile v0.0.0-20201217150744-e6ae53a27f4f // indirect
-	v2ray.com/core v4.10.0+incompatible // indirect
+	v2ray.com/core v4.19.1+incompatible
 )

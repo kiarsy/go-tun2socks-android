@@ -8,10 +8,10 @@ import (
 	"strings"
 	"syscall"
 
-	vcore "github.com/v2ray/v2ray-core"
-	vproxyman "github.com/v2ray/v2ray-core/app/proxyman"
-	vbytespool "github.com/v2ray/v2ray-core/common/bytespool"
-	vinternet "github.com/v2ray/v2ray-core/transport/internet"
+	vcore "v2ray.com/core"
+	vproxyman "v2ray.com/core/app/proxyman"
+	vbytespool "v2ray.com/core/common/bytespool"
+	vinternet "v2ray.com/core/transport/internet"
 
 	"github.com/eycorsican/go-tun2socks/core"
 	"github.com/eycorsican/go-tun2socks/proxy/v2ray"
