@@ -5,6 +5,8 @@ github.com/eycorsican/go-tun2socks v1.11.2 h1:ZT4nAJyRcGmfK6qlNyWxuv/enatnd1bVK3
 github.com/eycorsican/go-tun2socks v1.11.2/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
 github.com/eycorsican/go-tun2socks v1.11.3 h1:aHrBLkDVj4pyHYKzQn7WxJMHraZ5TvYmcKuA2cYlR10=
 github.com/eycorsican/go-tun2socks v1.11.3/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
+github.com/eycorsican/go-tun2socks v1.13.3 h1:46Eswh3R4jx1HD9IwunhIjiW6ODdy9dWHKP92Lh0mtQ=
+github.com/eycorsican/go-tun2socks v1.13.3/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
 github.com/eycorsican/go-tun2socks v1.14.1 h1:PJluZFojgtEY2e3j4Vig/8RRjotxQ9C+8ar+fIXZChk=
 github.com/eycorsican/go-tun2socks v1.14.1/go.mod h1:itJVcg8T4Lc1r+72CNpCV/SUNO8of0z/jFeAt31cQbA=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
